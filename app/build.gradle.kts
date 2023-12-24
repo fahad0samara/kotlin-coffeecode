@@ -1,6 +1,7 @@
 plugins {
   alias(libs.plugins.androidApplication)
   alias(libs.plugins.kotlinAndroid)
+  kotlin("plugin.serialization") version "1.9.22"
 
   alias(libs.plugins.googleServices)
   alias(libs.plugins.hiltAndroid)
@@ -41,7 +42,7 @@ android {
     compose = true
   }
   composeOptions {
-    kotlinCompilerExtensionVersion = "1.5.1"
+    kotlinCompilerExtensionVersion = "1.5.4"
   }
   packaging {
     resources {
@@ -96,7 +97,9 @@ dependencies {
   implementation(libs.androidx.hilt.navigation.compose.v100)
 
 
-
+  implementation("io.ktor:ktor-client-core:2.3.7")
+  implementation("io.ktor:ktor-client-cio:2.3.7")
+  implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
 
 
 

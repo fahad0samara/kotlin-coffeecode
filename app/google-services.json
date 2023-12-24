@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "522945303928",
+    "project_id": "coffeecode-e042e",
+    "storage_bucket": "coffeecode-e042e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:522945303928:android:217d0788e4abad006ee48d",
+        "android_client_info": {
+          "package_name": "com.fahad.coffeecode"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD9U5nWKrdORUVMuQdbgskbIw7REG-n1FU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
