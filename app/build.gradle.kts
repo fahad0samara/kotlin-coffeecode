@@ -1,6 +1,10 @@
 plugins {
   alias(libs.plugins.androidApplication)
-  alias(libs.plugins.jetbrainsKotlinAndroid)
+  alias(libs.plugins.kotlinAndroid)
+
+  alias(libs.plugins.googleServices)
+  alias(libs.plugins.hiltAndroid)
+  alias(libs.plugins.kotlinKsp)
 }
 
 android {
@@ -48,19 +52,75 @@ android {
 
 dependencies {
 
-  implementation(libs.androidx.core.ktx)
-  implementation(libs.androidx.lifecycle.runtime.ktx)
-  implementation(libs.androidx.activity.compose)
-  implementation(platform(libs.androidx.compose.bom))
-  implementation(libs.androidx.ui)
-  implementation(libs.androidx.ui.graphics)
-  implementation(libs.androidx.ui.tooling.preview)
-  implementation(libs.androidx.material3)
+  implementation(libs.core.ktx)
+  implementation(libs.lifecycle.runtime.ktx)
+  implementation(libs.activity.compose)
+  implementation(platform(libs.compose.bom))
+  implementation(libs.ui)
+  implementation(libs.ui.graphics)
+  implementation(libs.ui.tooling.preview)
+  implementation(libs.material3)
+
   testImplementation(libs.junit)
-  androidTestImplementation(libs.androidx.junit)
-  androidTestImplementation(libs.androidx.espresso.core)
-  androidTestImplementation(platform(libs.androidx.compose.bom))
-  androidTestImplementation(libs.androidx.ui.test.junit4)
-  debugImplementation(libs.androidx.ui.tooling)
-  debugImplementation(libs.androidx.ui.test.manifest)
+  androidTestImplementation(libs.androidx.test.ext.junit)
+  androidTestImplementation(libs.espresso.core)
+  androidTestImplementation(platform(libs.compose.bom))
+  androidTestImplementation(libs.ui.test.junit4)
+  debugImplementation(libs.ui.tooling)
+  debugImplementation(libs.ui.test.manifest)
+
+
+
+
+
+
+  //Room
+  val room_version = "2.6.0"
+  implementation("androidx.room:room-runtime:$room_version")
+  annotationProcessor("androidx.room:room-compiler:$room_version")
+  implementation ("androidx.room:room-ktx:2.6.0")
+  ksp("androidx.room:room-compiler:$room_version")
+
+  //Dagger Hilt
+  implementation(libs.hilt.android)
+  ksp(libs.hiltAndroidCompiler)
+  //Room
+  implementation(libs.androidx.room.runtime.v260)
+  ksp(libs.androidx.room.compiler.v260)
+  implementation (libs.androidx.room.ktx.v260)
+
+  //lifecycle
+  implementation(libs.androidx.lifecycle.viewmodel.compose.v262)
+  //navigation
+  implementation(libs.navigation.compose)
+  implementation(libs.androidx.hilt.navigation.compose.v100)
+
+
+
+
+
+
+  //firebase
+  implementation(platform("com.google.firebase:firebase-bom:32.5.0"))
+  //noinspection UseTomlInstead
+  implementation("com.google.firebase:firebase-analytics-ktx")
+  implementation("com.google.firebase:firebase-auth-ktx")
+  implementation(libs.firebase.storage.ktx)
+
+
+
+
+  //phothoView
+  implementation (libs.coil.compose)
+
+  //WindowSizeClass
+  implementation ("androidx.compose.material3:material3-window-size-class:1.1.2")
+
+
+}
+ksp {
+  // All KSP Gradle plugin options
+  arg("com.google.devtools.ksp.incremental.apt", "true")
+
+
 }
