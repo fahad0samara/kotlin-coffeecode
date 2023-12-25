@@ -18,7 +18,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.fahad.coffeecode.model.CoffeeDrink
 import com.fahad.coffeecode.ui.theme.CoffeeCodeTheme
+import com.fahad.coffeecode.ui.theme.CoffeeViewModel
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.request.get
@@ -47,20 +50,35 @@ class MainActivity : ComponentActivity() {
       CoffeeCodeTheme {
         // A surface container using the 'background' color from the theme
         Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
+          val coffeeViewModel: CoffeeViewModel = viewModel()
+          // Call the function to perform the network request
+          coffeeViewModel.fetchCoffeeDrinkList()
+
+          // Observe the LiveData and display the data in the UI
+          CoffeeDrinkList(coffeeViewModel.coffeeDrinkList.value)
           FetchAndDisplayData()
         }
-      }
+       }
+    }
+  }
+}
+
+@Composable
+fun CoffeeDrinkList(coffeeDrinkList: List<CoffeeDrink>) {
+  // Display the list of coffee drinks
+  LazyColumn {
+    items(coffeeDrinkList) { coffeeDrink ->
+      // Use Text() or other Compose components to display the relevant information for each item
+      Text(text = "Name: ${coffeeDrink.name}\nType: ${coffeeDrink.categoryId}")
     }
   }
 }
 
 
-
-
 @Composable
 fun FetchAndDisplayData() {
   // State to hold the fetched data
-  var todoItem by remember { mutableStateOf<List<TodoItem>>(emptyList()) }
+  var todoItem by remember { mutableStateOf<List<CoffeeDrink>>(emptyList()) }
 
   // Coroutine to make network request on a background thread
   LaunchedEffect(true) {
@@ -69,7 +87,7 @@ fun FetchAndDisplayData() {
 
     try {
       // Make a GET request
-      val response: HttpResponse = client.get("https://jsonplaceholder.typicode.com/todos")
+      val response: HttpResponse = client.get("https://coofee.azurewebsites.net/api/coffee-items")
 
       // Parse JSON response into TodoItem data class
         todoItem = Json.decodeFromString(response.bodyAsText())
@@ -88,7 +106,7 @@ fun FetchAndDisplayData() {
     LazyColumn {
       items(todoItem) { todoItem ->
         // Use Text() or other Compose components to display the relevant information for each item
-        Text(text = "Title: ${todoItem.title}\nCompleted: ${todoItem.completed}")
+        Text(text = "Title: ${todoItem.name}\nCompleted: ${todoItem.description}")
       }
     }
   }
