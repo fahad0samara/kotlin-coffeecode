@@ -97,9 +97,10 @@ dependencies {
   implementation(libs.androidx.hilt.navigation.compose.v100)
 
 
-  implementation("io.ktor:ktor-client-core:2.3.7")
-  implementation("io.ktor:ktor-client-cio:2.3.7")
+  implementation(libs.ktor.client.core)
+  implementation(libs.ktor.client.cio)
   implementation(libs.kotlinx.serialization.json)
+
 
 
 
