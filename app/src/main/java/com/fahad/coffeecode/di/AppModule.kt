@@ -40,6 +40,6 @@ object ViewModelModule {
   @Provides
   @ViewModelScoped
   fun provideCoffeeViewModel(repository: CoffeeRepository): CoffeeViewModel {
-    return CoffeeViewModel(repository)
+    return CoffeeViewModel()
   }
 }

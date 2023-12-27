@@ -1,41 +1,67 @@
 package com.fahad.coffeecode.ui.theme
 
 import android.util.Log
-import androidx.compose.runtime.mutableStateOf
+
 import androidx.lifecycle.ViewModel
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
-import com.fahad.coffeecode.data.CoffeeRepository
 import com.fahad.coffeecode.model.CoffeeDrink
-import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.launch
+
+import kotlinx.serialization.json.Json
+import io.ktor.client.*
+import io.ktor.client.engine.cio.*
+import io.ktor.client.request.*
+import io.ktor.client.statement.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
-@HiltViewModel
-class CoffeeViewModel @Inject constructor(private val repository: CoffeeRepository) : ViewModel() {
+@ViewModelScoped
+class CoffeeViewModel @Inject constructor() : ViewModel() {
+  private val _coffeeItems = MutableStateFlow<List<CoffeeDrink>>(emptyList())
+  val coffeeItems: StateFlow<List<CoffeeDrink>> = _coffeeItems.asStateFlow()
 
-  val coffeeDrinkList = mutableStateOf<List<CoffeeDrink>>(emptyList())
-  val isFetching = mutableStateOf(false)
+  private val _isLoading = MutableStateFlow(false)
+  val isLoading: StateFlow<Boolean> = _isLoading
 
-  fun fetchCoffeeDrinkList() {
+    private val _error = MutableStateFlow("")
+    val error: StateFlow<String> = _error.asStateFlow()
+
+
+
+    init {
+    fetchData()
+    }
+
+
+  fun fetchData() {
+    _isLoading.value = true
     viewModelScope.launch {
       try {
-        // Set isFetching to true before making the request
-        isFetching.value = true
+
+        val client = HttpClient(CIO)
+        val response: HttpResponse = client.get("https://coofee.azurewebsites.net/api/coffee-items")
+        val items = Json.decodeFromString<List<CoffeeDrink>>(response.bodyAsText())
+        _coffeeItems.value = items
+
+        Log.d("CoffeeViewModel", "Items: $items")
 
 
-        // Use the repository to get the coffee drink list
-        coffeeDrinkList.value = repository.getCoffeeDrinkList()
       } catch (e: Exception) {
-        // Handle errors (you might want to throw a custom exception)
-        println("Error: ${e.message}")
+        _error.value = "Error: ${e.message}"
         Log.e("CoffeeViewModel", "Error: ${e.message}")
-        isFetching.value = false
-        // Return an empty list in case of an error
-        coffeeDrinkList.value = emptyList()
+
       } finally {
-        // Set isFetching to false after the request is completed
-        isFetching.value = false
+        _isLoading.value = false
       }
     }
   }
 }
+
+
+
+
+
