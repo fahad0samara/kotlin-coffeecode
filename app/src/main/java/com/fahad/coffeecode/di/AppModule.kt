@@ -16,30 +16,21 @@ import dagger.hilt.components.SingletonComponent
 import dagger.hilt.android.components.ViewModelComponent
 
 
-@Module
-@InstallIn(SingletonComponent::class)
-object AppModule {
+//@Module
+//@InstallIn(SingletonComponent::class)
+//object AppModule {
+//
+//  @Provides
+//  @Singleton
+//  fun provideHttpClient(): HttpClient {
+//    return HttpClient(CIO)
+//  }
+//
+//  @Provides
+//  @Singleton
+//  fun provideCoffeeRepository(client: HttpClient): CoffeeRepository {
+//    return CoffeeRepository(client)
+//  }
+//}
 
-  @Provides
-  @Singleton
-  fun provideHttpClient(): HttpClient {
-    return HttpClient(CIO)
-  }
 
-  @Provides
-  @Singleton
-  fun provideCoffeeRepository(client: HttpClient): CoffeeRepository {
-    return CoffeeRepository(client)
-  }
-}
-
-@Module
-@InstallIn(ViewModelComponent::class)
-object ViewModelModule {
-
-  @Provides
-  @ViewModelScoped
-  fun provideCoffeeViewModel(repository: CoffeeRepository): CoffeeViewModel {
-    return CoffeeViewModel()
-  }
-}

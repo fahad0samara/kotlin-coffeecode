@@ -37,6 +37,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
@@ -44,7 +45,9 @@ import coil.size.Scale
 import coil.transform.CircleCropTransformation
 
 @Composable
-fun FetchAndDisplayData(viewModel: CoffeeViewModel = hiltViewModel()) {
+fun FetchAndDisplayData() {
+//  val viewModel =hiltViewModel<CoffeeViewModel>()
+  val viewModel: CoffeeViewModel = viewModel()
   val coffeeItems by viewModel.coffeeItems.collectAsState()
   val isLoading by viewModel.isLoading.collectAsState()
   val error by viewModel.error.collectAsState()
@@ -99,6 +102,66 @@ fun FetchAndDisplayData(viewModel: CoffeeViewModel = hiltViewModel()) {
     }
   }
 }
+
+@Composable
+fun FetchAndDisplayData1() {
+//  val viewModel =hiltViewModel<CoffeeViewModel>()
+  val viewModel: CoffeeViewModel = viewModel()
+  val coffeeItems by viewModel.coffeeItems1.collectAsState()
+  val isLoading by viewModel.isLoading1.collectAsState()
+  val error by viewModel.error1.collectAsState()
+
+  Surface(
+    modifier = Modifier.fillMaxSize(),
+    color = MaterialTheme.colorScheme.background
+  ) {
+    if (isLoading) {
+      // Show a loading indicator
+      CircularProgressIndicator(
+        modifier = Modifier
+          .padding(16.dp)
+          .wrapContentWidth(Alignment.CenterHorizontally)
+          .wrapContentHeight(Alignment.CenterVertically)
+      )
+    } else {
+      // Use LazyColumn to display the list of items
+      LazyColumn {
+        items(coffeeItems) { coffeeItem ->
+          Column(
+            modifier = Modifier
+              .fillMaxWidth()
+              .padding(16.dp)
+          ) {
+            // Display the image using Coil
+            AsyncImageProfile(photoUrl = coffeeItem.image)
+
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // Display other text information
+            Text(text = "Title: ${coffeeItem.title}", fontWeight = FontWeight.Bold)
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(text = "Description: ${coffeeItem.description}")
+            // Add more text fields for other details if needed
+          }
+          Divider(modifier = Modifier.padding(vertical = 8.dp))
+        }
+      }
+    }
+
+    if (error.isNotEmpty()) {
+      // Show an error message
+      Text(
+        text = "Error: $error",
+        modifier = Modifier
+          .padding(16.dp)
+          .fillMaxWidth()
+          .wrapContentHeight(Alignment.CenterVertically)
+      )
+    }
+  }
+}
+
 
 
 @Composable
