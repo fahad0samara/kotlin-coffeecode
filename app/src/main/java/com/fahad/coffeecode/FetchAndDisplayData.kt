@@ -1,6 +1,7 @@
 package com.fahad.coffeecode
 
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -17,6 +18,9 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -54,14 +58,10 @@ fun FetchAndDisplayData() {
   val error by viewModel.error.collectAsState()
 
   // State variable to track the selected category
-  var selectedCategory by remember { mutableStateOf("Espresso")}
+  var selectedCategory by remember { mutableStateOf("Espresso") }
 
   // Filtered coffee items based on the selected category
-  val filteredCoffeeItems = if (selectedCategory.isNotEmpty()) {
-    coffeeItems.filter { it.categoryId == selectedCategory }
-  } else {
-    coffeeItems
-  }
+  val filteredCoffeeItems = coffeeItems.filter { it.categoryId == selectedCategory }
 
   Surface(
     modifier = Modifier.fillMaxSize(),
@@ -70,9 +70,7 @@ fun FetchAndDisplayData() {
     Column {
       // LazyRow for displaying categories
       LazyRow {
-        items(coffeeItems.distinctBy { it.categoryId })
-
-          { category ->
+        items(coffeeItems.distinctBy { it.categoryId }) { category ->
           CategoryItem(category.categoryId, selectedCategory == category.categoryId) {
             // Update the selected category when clicked
             selectedCategory = category.categoryId
@@ -80,41 +78,31 @@ fun FetchAndDisplayData() {
         }
       }
 
+      // Use LazyColumn to display the filtered list of items
+      LazyVerticalGrid(
+        columns = GridCells.Fixed(2),
+        modifier = Modifier
+          .fillMaxWidth()
+          .padding(16.dp)
+      ) {
+        items(filteredCoffeeItems) { coffeeItem ->
+          CoffeeItemCard(coffeeItem)
+          Divider(modifier = Modifier.padding(vertical = 8.dp))
+        }
+      }
+
+      // Loading indicator
       if (isLoading) {
-        // Show a loading indicator
         CircularProgressIndicator(
           modifier = Modifier
             .padding(16.dp)
             .wrapContentWidth(Alignment.CenterHorizontally)
             .wrapContentHeight(Alignment.CenterVertically)
         )
-      } else {
-        // Use LazyColumn to display the filtered list of items
-        LazyColumn {
-          items(filteredCoffeeItems) { coffeeItem ->
-            Column(
-              modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-            ) {
-              // Display the image using Coil
-              AsyncImageProfile(photoUrl = coffeeItem.imageUri)
-
-              Spacer(modifier = Modifier.height(8.dp))
-
-              // Display other text information
-              Text(text = "Title: ${coffeeItem.name}", fontWeight = FontWeight.Bold)
-              Spacer(modifier = Modifier.height(4.dp))
-              Text(text = "Description: ${coffeeItem.description}")
-              // Add more text fields for other details if needed
-            }
-            Divider(modifier = Modifier.padding(vertical = 8.dp))
-          }
-        }
       }
 
+      // Error message
       if (error.isNotEmpty()) {
-        // Show an error message
         Text(
           text = "Error: $error",
           modifier = Modifier
@@ -127,7 +115,25 @@ fun FetchAndDisplayData() {
   }
 }
 
-// Category item composable
+@Composable
+fun CoffeeItemCard(coffeeItem: CoffeeDrink) {
+  Column(
+    modifier = Modifier
+      .fillMaxWidth()
+      .padding(16.dp)
+  ) {
+    // Display the image using Coil
+    AsyncImageProfile(photoUrl = coffeeItem.imageUri)
+
+    Spacer(modifier = Modifier.height(8.dp))
+
+    // Display other text information
+    Text(text = "Title: ${coffeeItem.name}", fontWeight = FontWeight.Bold)
+    Spacer(modifier = Modifier.height(4.dp))
+    // Add more text fields for other details if needed
+  }
+}
+
 @Composable
 fun CategoryItem(categoryId: String, isSelected: Boolean, onClick: () -> Unit) {
   Text(
@@ -138,6 +144,7 @@ fun CategoryItem(categoryId: String, isSelected: Boolean, onClick: () -> Unit) {
       .background(if (isSelected) Color.Gray else Color.Transparent)
   )
 }
+
 
 
 @Composable
