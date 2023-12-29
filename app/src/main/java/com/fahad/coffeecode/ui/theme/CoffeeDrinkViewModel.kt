@@ -27,6 +27,8 @@ class CoffeeViewModel : ViewModel() {
   private val _coffeeItems = MutableStateFlow<List<CoffeeDrink>>(emptyList())
   val coffeeItems: StateFlow<List<CoffeeDrink>> = _coffeeItems.asStateFlow()
 
+
+
   private val _isLoading = MutableStateFlow(false)
   val isLoading: StateFlow<Boolean> = _isLoading
 
@@ -41,9 +43,10 @@ class CoffeeViewModel : ViewModel() {
   private val _error1 = MutableStateFlow("")
   val error1: StateFlow<String> = _error1.asStateFlow()
 
+
+
   init {
     fetchData()
-    fetchData1()
   }
 
   fun fetchData() {
