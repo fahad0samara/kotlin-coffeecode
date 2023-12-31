@@ -1,59 +1,52 @@
-package com.fahad.coffeecode
+package com.fahad.coffeecode.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.ui.platform.LocalContext
+import com.fahad.coffeecode.InternetStatusScreen
+import com.fahad.coffeecode.isInternetAvailable
+import com.fahad.coffeecode.ui.Home.Home
 
 import com.fahad.coffeecode.ui.theme.CoffeeCodeTheme
-import com.fahad.coffeecode.ui.theme.CoffeeViewModel
 
 import dagger.hilt.android.AndroidEntryPoint
-import io.ktor.client.HttpClient
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-
-
-
-
-
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContent {
       CoffeeCodeTheme {
-        // A surface container using the 'background' color from the theme
-        Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-          Column {
-            FetchAndDisplayData()
-          }
-
-
-
+        Surface(
+          modifier = Modifier.fillMaxSize(),
+          color = MaterialTheme.colorScheme.background
+        ) {
+          AppContent()
         }
-       }
+      }
     }
   }
 }
 
-
-
-
-
-
+@Composable
+fun AppContent() {
+  if (isInternetAvailable(
+        context = LocalContext.current
+        )
+  ) {
+    Home()
+  } else {
+    InternetStatusScreen()
+  }
+}
 
 
 
