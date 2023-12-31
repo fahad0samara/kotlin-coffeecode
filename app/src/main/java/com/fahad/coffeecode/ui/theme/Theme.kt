@@ -91,21 +91,20 @@ fun CoffeeCodeTheme(
   darkTheme: Boolean = isSystemInDarkTheme(),
   // Dynamic color is available on Android 12+
   dynamicColor: Boolean = true,
-  activity: Activity = LocalContext.current as MainActivity,
+  activity: Activity= LocalContext.current as MainActivity,
   content: @Composable () -> Unit,
-) {
-  // Determine color scheme based on conditions
+
+  ) {
   val colorScheme = when {
     dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
       val context = LocalContext.current
       if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
     }
+
     darkTheme -> DarkColors
     else -> LightColors
   }
-
   val view = LocalView.current
-  // Apply system UI changes only when not in edit mode
   if (!view.isInEditMode) {
     SideEffect {
       val window = (view.context as Activity).window
@@ -113,12 +112,9 @@ fun CoffeeCodeTheme(
       WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
     }
   }
-
-  // Calculate window size class and screen configuration
   val window = calculateWindowSizeClass(activity = activity)
   val config = LocalConfiguration.current
 
-  // Set typography and dimensions based on screen size
   var typography = CompactTypography
   var appDimens = CompactDimens
 
@@ -138,26 +134,24 @@ fun CoffeeCodeTheme(
       appDimens = CompactMediumDimens
       typography = CompactMediumTypography
     }
-    config.screenWidthDp in 599..959 -> {
+    config.screenWidthDp >= 599 && config.screenWidthDp < 960 -> {
       // Medium
       appDimens = MediumDimens
       typography = MediumDimensTypography
     }
-    config.screenWidthDp in 960..1199 -> {
+    config.screenWidthDp >= 960 && config.screenWidthDp < 1200 -> {
       // Large
       appDimens = LargeDimens
       typography = LargeTypography
-    }
-    else -> {
-      // Expanded
-      appDimens = ExpandedDimens
-      typography = ExpandedTypography
-    }
+    }else -> {
+    // Expanded
+    appDimens = ExpandedDimens
+    typography = ExpandedTypography
+  }
   }
 
-  // Apply the custom app dimensions
+
   ProvideAppUtils(appDimens = appDimens) {
-    // Apply MaterialTheme with the determined color scheme and typography
     MaterialTheme(
       colorScheme = colorScheme,
       typography = typography,
@@ -166,7 +160,6 @@ fun CoffeeCodeTheme(
   }
 }
 
-// Accessor for app dimensions
 val dimens
   @Composable
   get() = LocalAppDimens.current

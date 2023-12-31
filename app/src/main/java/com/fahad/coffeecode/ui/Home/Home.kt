@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -24,7 +25,7 @@ import com.fahad.coffeecode.ui.Home.component.item.ItemAndCategory
 fun Home() {
   LazyColumn(
     contentPadding = PaddingValues(vertical = 2.dp),
-    modifier = Modifier
+    modifier = Modifier.statusBarsPadding()
   ) {
     item {
       Header()
@@ -60,39 +61,38 @@ fun Home() {
       ItemAndCategory()
     }
     item {
-      ItemAndCategory()
-    }
-    item {
-      Text(
-        text = "Popular Coffees",
+      Row(
         modifier = Modifier
           .fillMaxWidth()
-          .padding(16.dp),
-        style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold)
+          .padding(5.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+      ) {
+        Text(
+          text = "Explore Popular Coffees",
+          modifier = Modifier
+            .padding(6.dp),
+          style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold)
+        )
+        Text(
+          text = "See All",
+          modifier = Modifier
+            .padding(6.dp)
+            .clickable { /* Handle See All click */ },
+          style = MaterialTheme.typography.bodyMedium.copy(
+            fontWeight = FontWeight.Bold,
+            fontSize = 14.sp,
+            color = MaterialTheme.colorScheme.primary
+          )
+        )
+      }
+    }
 
-      )
+item {
+  CardsSection()
     }
-    item {
-      ItemAndCategory()
-    }
-    item {
-      ItemAndCategory()
-    }
-    item {
-      Text(
-        text = "For You",
-        modifier = Modifier
-          .fillMaxWidth()
-          .padding(16.dp),
-        style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold)
-      )
-    }
-    item {
-      ItemAndCategory()
-    }
-    item {
-      ItemAndCategory()
-    }
+
+
   }
 }
 

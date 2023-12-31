@@ -65,10 +65,8 @@ fun ItemAndCategory() {
   // Filtered coffee items based on the selected category
   val filteredCoffeeItems = coffeeItems.filter { it.categoryId == selectedCategory }
 
-  Surface(
-    modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
-  ) {
-    Column {
+
+    Column() {
       // LazyRow for displaying categories
       LazyRow(
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 1
@@ -122,7 +120,7 @@ fun ItemAndCategory() {
       }
     }
   }
-}
+
 
 @Composable
 fun CoffeeItemCard(coffeeItem: CoffeeDrink) {
