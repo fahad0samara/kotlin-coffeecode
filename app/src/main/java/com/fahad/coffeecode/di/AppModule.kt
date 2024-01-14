@@ -1,36 +1,50 @@
 package com.fahad.coffeecode.di
 
-import com.fahad.coffeecode.data.CoffeeRepository
-import com.fahad.coffeecode.ui.theme.CoffeeViewModel
+import com.fahad.coffeecode.data.remote.repository.CoffeeRepository
+import com.fahad.coffeecode.data.remote.service.CoffeeService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 
-import dagger.hilt.android.scopes.ViewModelScoped
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.serialization.kotlinx.json.json
 import javax.inject.Singleton
 
+@Module
 
-import dagger.hilt.components.SingletonComponent
-import dagger.hilt.android.components.ViewModelComponent
+@InstallIn(SingletonComponent::class)
+object AppModule {
+
+  @Singleton
+  @Provides
+  fun provideHttpClient(): HttpClient {
+    return HttpClient(CIO) {
+      install(ContentNegotiation) {
+        json()
+      }
+    }
+  }
+
+  @Provides
+  @Singleton
+  fun provideCoffeeService(client: HttpClient): CoffeeService {
+    return CoffeeService(ApiConstants.COFFEE_SERVICE_BASE_URL, client)
+  }
+
+  @Provides
+  @Singleton
+  fun provideCoffeeRepository( coffeeService: CoffeeService): CoffeeRepository {
+    return CoffeeRepository( coffeeService)
+  }
+}
 
 
-//@Module
-//@InstallIn(SingletonComponent::class)
-//object AppModule {
-//
-//  @Provides
-//  @Singleton
-//  fun provideHttpClient(): HttpClient {
-//    return HttpClient(CIO)
-//  }
-//
-//  @Provides
-//  @Singleton
-//  fun provideCoffeeRepository(client: HttpClient): CoffeeRepository {
-//    return CoffeeRepository(client)
-//  }
-//}
+
+
+
+
 
 

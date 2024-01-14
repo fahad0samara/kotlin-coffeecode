@@ -1,14 +1,10 @@
-package com.fahad.coffeecode.ui.theme
+package com.fahad.coffeecode.ui.Home.component.item
 
 import android.util.Log
-
 import androidx.lifecycle.ViewModel
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
-import com.fahad.coffeecode.model.Coffe
-import com.fahad.coffeecode.model.CoffeApi
+
 import com.fahad.coffeecode.model.CoffeeDrink
-import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.launch
 
 import kotlinx.serialization.json.Json
@@ -17,13 +13,12 @@ import io.ktor.client.engine.cio.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.isSuccess
+import io.ktor.utils.io.errors.IOException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import javax.inject.Inject
 
-
-class CoffeeViewModel : ViewModel() {
+class CoffeeViewModel1 : ViewModel() {
   private val _coffeeItems = MutableStateFlow<List<CoffeeDrink>>(emptyList())
   val coffeeItems: StateFlow<List<CoffeeDrink>> = _coffeeItems.asStateFlow()
 
@@ -34,8 +29,8 @@ class CoffeeViewModel : ViewModel() {
 
   private val _error = MutableStateFlow("")
   val error: StateFlow<String> = _error.asStateFlow()
-  private val _coffeeItems1 = MutableStateFlow<List<CoffeApi>>(emptyList())
-  val coffeeItems1: StateFlow<List<CoffeApi>> = _coffeeItems1.asStateFlow()
+  private val _coffeeItems1 = MutableStateFlow<List<CoffeeDrink>>(emptyList())
+  val coffeeItems1: StateFlow<List<CoffeeDrink>> = _coffeeItems1.asStateFlow()
 
   private val _isLoading1 = MutableStateFlow(false)
   val isLoading1: StateFlow<Boolean> = _isLoading1
@@ -46,14 +41,14 @@ class CoffeeViewModel : ViewModel() {
 
 
   init {
-    fetchData()
+    fetchData12()
   }
 
   fun fetchData() {
     _isLoading.value = true
     viewModelScope.launch {
       try {
-        val client = HttpClient(CIO)
+        val client = HttpClient()
         val response: HttpResponse = client.get("https://coofee.azurewebsites.net/api/coffee-items")
         val responseBody = response.bodyAsText()
         Log.d("CoffeeViewModel", "Response body: $responseBody")
@@ -70,6 +65,8 @@ class CoffeeViewModel : ViewModel() {
             "Error: ${response.status.value} - ${response.status.description}"
           )
         }
+        client.close()
+
       } catch (e: Exception) {
         _error.value = "Error: ${e.message}"
         Log.e("CoffeeViewModel", "Error: ${e.message}", e)
@@ -78,6 +75,39 @@ class CoffeeViewModel : ViewModel() {
       }
     }
   }
+
+
+
+  fun fetchData12() {
+    _isLoading.value = true
+    val client = HttpClient(CIO)
+    viewModelScope.launch {
+      try {
+
+        val response: HttpResponse = client.get("https://coofee.azurewebsites.net/api/coffee-items")
+        val responseBody = response.bodyAsText()
+        if (response.status.isSuccess()) {
+          val coffeeDrinkList: List<CoffeeDrink> = Json.decodeFromString(responseBody)
+          _coffeeItems.value = coffeeDrinkList
+          Log.e(  "CoffeeViewModel", "Coffee list: $coffeeDrinkList")
+        } else {
+          _error.value = "Error: ${response.status.value} - ${response.status.description}"
+
+        }
+
+      } catch (e: IOException) {
+        _error.value = "Network error: ${e.message}"
+      } catch (e: Exception) {
+        _error.value = "Error: ${e.message}"
+      } finally {
+        _isLoading.value = false
+        client.close()
+      }
+    }
+  }
+
+
+
 
   fun fetchData1() {
     _isLoading1.value = true
@@ -89,7 +119,7 @@ class CoffeeViewModel : ViewModel() {
         Log.d("CoffeeViewModel", "Response body: $responseBody")
 
         if (response.status.isSuccess()) {
-          val coffeeDrinkList1: List<CoffeApi> = Json.decodeFromString(responseBody)
+          val coffeeDrinkList1: List<CoffeeDrink> = Json.decodeFromString(responseBody)
           Log.d("CoffeeViewModel", "Coffee list: $coffeeDrinkList1")
           _coffeeItems1.value = coffeeDrinkList1
         } else {

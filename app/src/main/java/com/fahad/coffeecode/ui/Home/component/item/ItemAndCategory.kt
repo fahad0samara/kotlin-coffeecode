@@ -33,11 +33,9 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import com.fahad.coffeecode.model.CoffeeDrink
-import com.fahad.coffeecode.ui.theme.CoffeeViewModel
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -48,13 +46,15 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.fahad.coffeecode.R
+import com.fahad.coffeecode.ui.CoffeeViewModel
 import com.fahad.coffeecode.util.icon.IconButtonWithIcon
 
 @Composable
 fun ItemAndCategory() {
-  val viewModel: CoffeeViewModel = viewModel()
+  val viewModel: CoffeeViewModel = hiltViewModel()
+
   val coffeeItems by viewModel.coffeeItems.collectAsState()
   val isLoading by viewModel.isLoading.collectAsState()
   val error by viewModel.error.collectAsState()

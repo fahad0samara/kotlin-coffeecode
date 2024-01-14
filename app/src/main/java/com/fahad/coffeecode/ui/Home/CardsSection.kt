@@ -1,7 +1,6 @@
 package com.fahad.coffeecode.ui.Home
 
 import AsyncImageProfile
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -31,7 +30,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.fahad.coffeecode.R
 import com.fahad.coffeecode.model.CoffeeDrink
-import com.fahad.coffeecode.ui.theme.CoffeeViewModel
+import com.fahad.coffeecode.ui.CoffeeViewModel
+
 import com.fahad.coffeecode.ui.theme.dimens
 
 @Composable
