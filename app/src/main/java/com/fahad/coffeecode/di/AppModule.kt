@@ -1,6 +1,6 @@
 package com.fahad.coffeecode.di
 
-import com.fahad.coffeecode.data.remote.repository.CoffeeRepository
+import com.fahad.coffeecode.data.remote.repository.data.CoffeeRepository
 import com.fahad.coffeecode.data.remote.service.CoffeeService
 import dagger.Module
 import dagger.Provides
@@ -14,7 +14,6 @@ import io.ktor.serialization.kotlinx.json.json
 import javax.inject.Singleton
 
 @Module
-
 @InstallIn(SingletonComponent::class)
 object AppModule {
 

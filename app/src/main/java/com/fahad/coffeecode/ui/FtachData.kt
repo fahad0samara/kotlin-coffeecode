@@ -2,8 +2,8 @@ package com.fahad.coffeecode.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.fahad.coffeecode.data.remote.repository.CoffeeRepository
-import com.fahad.coffeecode.model.CoffeeDrink
+import com.fahad.coffeecode.data.remote.repository.data.CoffeeRepository
+import com.fahad.coffeecode.domain.model.CoffeeDrink
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

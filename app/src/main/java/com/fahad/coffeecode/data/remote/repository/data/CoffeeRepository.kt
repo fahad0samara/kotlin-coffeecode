@@ -1,7 +1,6 @@
-package com.fahad.coffeecode.data.remote.repository
+package com.fahad.coffeecode.data.remote.repository.data
 import com.fahad.coffeecode.data.remote.service.CoffeeService
-import com.fahad.coffeecode.model.CoffeeDrink
-import io.ktor.client.HttpClient
+import com.fahad.coffeecode.domain.model.CoffeeDrink
 import javax.inject.Inject
 import javax.inject.Singleton
 

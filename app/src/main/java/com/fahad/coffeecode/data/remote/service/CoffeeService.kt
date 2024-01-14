@@ -2,7 +2,7 @@ package com.fahad.coffeecode.data.remote.service
 
 import android.util.Log
 import com.fahad.coffeecode.di.ApiConstants
-import com.fahad.coffeecode.model.CoffeeDrink
+import com.fahad.coffeecode.domain.model.CoffeeDrink
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.statement.HttpResponse

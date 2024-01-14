@@ -1,4 +1,4 @@
-package com.fahad.coffeecode.model
+package com.fahad.coffeecode.domain.model
 
 
 

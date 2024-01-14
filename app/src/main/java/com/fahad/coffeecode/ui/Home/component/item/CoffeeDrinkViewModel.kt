@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 
-import com.fahad.coffeecode.model.CoffeeDrink
+import com.fahad.coffeecode.domain.model.CoffeeDrink
 import kotlinx.coroutines.launch
 
 import kotlinx.serialization.json.Json

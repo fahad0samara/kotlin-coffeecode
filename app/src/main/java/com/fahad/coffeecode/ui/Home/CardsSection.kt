@@ -29,7 +29,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.fahad.coffeecode.R
-import com.fahad.coffeecode.model.CoffeeDrink
+import com.fahad.coffeecode.domain.model.CoffeeDrink
 import com.fahad.coffeecode.ui.CoffeeViewModel
 
 import com.fahad.coffeecode.ui.theme.dimens
@@ -62,7 +62,7 @@ fun CardsSection(
 fun CardItem(
   coffeeItem: CoffeeDrink,
 
-) {
+  ) {
 
   Box(
     modifier = Modifier .padding(start = dimens.small2, end = dimens.small1).clickable(onClick = {
