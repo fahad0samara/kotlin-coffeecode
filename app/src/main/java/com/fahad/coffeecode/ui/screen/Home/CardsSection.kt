@@ -1,4 +1,4 @@
-package com.fahad.coffeecode.ui.Home
+package com.fahad.coffeecode.ui.screen.Home
 
 import AsyncImageProfile
 import androidx.compose.foundation.background

@@ -1,4 +1,4 @@
-package com.fahad.coffeecode.ui.Home.component.item
+package com.fahad.coffeecode.ui.screen.Home.component.item
 
 import android.util.Log
 import androidx.lifecycle.ViewModel

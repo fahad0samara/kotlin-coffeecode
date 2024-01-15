@@ -1,4 +1,4 @@
-package com.fahad.coffeecode.ui.Home
+package com.fahad.coffeecode.ui.screen.Home
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -14,15 +14,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.fahad.coffeecode.ui.Home.component.Heder.Header
+import com.fahad.coffeecode.ui.screen.Home.component.Heder.Header
 
 
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import com.fahad.coffeecode.ui.Home.component.item.ItemAndCategory
+import androidx.navigation.NavController
+import com.fahad.coffeecode.ui.screen.Home.component.item.ItemAndCategory
+import com.fahad.coffeecode.ui.screen.profile.UserDataViewModel
 
 @Composable
-fun Home() {
+fun Home(
+
+  userDataViewModel: UserDataViewModel
+) {
   LazyColumn(
     contentPadding = PaddingValues(vertical = 2.dp),
     modifier = Modifier.statusBarsPadding()

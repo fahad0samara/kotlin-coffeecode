@@ -18,9 +18,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.rememberNavController
 import com.fahad.coffeecode.InternetStatusScreen
 import com.fahad.coffeecode.isInternetAvailable
-import com.fahad.coffeecode.ui.Home.Home
+import com.fahad.coffeecode.ui.screen.Home.Home
+import com.fahad.coffeecode.ui.navigation.RootNavigation
 
 import com.fahad.coffeecode.ui.theme.CoffeeCodeTheme
 
@@ -47,7 +49,7 @@ class MainActivity : ComponentActivity() {
           modifier = Modifier.fillMaxSize(),
           color = MaterialTheme.colorScheme.background
         ) {
-          AppContent()
+          RootNavigation(navController = rememberNavController())
         }
       }
     }
@@ -60,7 +62,7 @@ fun AppContent() {
         context = LocalContext.current
         )
   ) {
-    Home()
+
   } else {
     InternetStatusScreen()
   }

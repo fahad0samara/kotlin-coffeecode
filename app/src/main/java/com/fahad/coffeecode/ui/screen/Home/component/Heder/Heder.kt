@@ -1,4 +1,4 @@
-package com.fahad.coffeecode.ui.Home.component.Heder
+package com.fahad.coffeecode.ui.screen.Home.component.Heder
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
