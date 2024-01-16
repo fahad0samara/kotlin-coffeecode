@@ -1,6 +1,7 @@
 package com.fahad.coffeecode.ui.screen.Home.component.item
 
 import AsyncImageProfile
+import RecipeRover.data.local.entities.FavoriteItem
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -24,8 +25,8 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ShoppingCart
-import androidx.compose.material3.Card
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedCard
@@ -42,15 +43,22 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.fahad.coffeecode.R
 import com.fahad.coffeecode.ui.CoffeeViewModel
+import com.fahad.coffeecode.ui.screen.favorite.FavoriteViewModel
 import com.fahad.coffeecode.util.icon.IconButtonWithIcon
+import kotlinx.coroutines.flow.first
 
 @Composable
 fun ItemAndCategory() {
   val viewModel: CoffeeViewModel = hiltViewModel()
+  val favoriteViewModel: FavoriteViewModel = hiltViewModel()
+
+
+
+
+
 
   val coffeeItems by viewModel.coffeeItems.collectAsState()
   val isLoading by viewModel.isLoading.collectAsState()
@@ -91,7 +99,26 @@ fun ItemAndCategory() {
         CoffeeItemCard(
           coffeeItem = item,
           backgroundTint = color,
+          onFavoriteClick = { isFavorite ->
+            if (isFavorite) {
+              favoriteViewModel.addToFavorite(item)
+            } else {
+              // Create a FavoriteItem from CoffeeDrink
+              val favoriteItemToDelete = FavoriteItem(
+                name = item.name,
+                description = item.description,
+                imageUri = item.imageUri,
+                servingSize = item.servingSize,
+                caffeineContent = item.caffeineContent,
+              )
+              favoriteViewModel.deleteFromFavorites(favoriteItemToDelete)
+            }
+          }
         )
+
+
+
+
       }
     }
 
@@ -118,64 +145,7 @@ fun ItemAndCategory() {
   }
 }
 
-@Composable
-fun CoffeeItemCard(coffeeItem: CoffeeDrink) {
-  Card(
-    modifier = Modifier
-      .fillMaxWidth()
-      .padding(16.dp)
-      .clickable { /* Handle card click if needed */ },
-    shape = RoundedCornerShape(16.dp),
-  ) {
-    Column(
-      modifier = Modifier.fillMaxWidth()
-    ) {
-      // Display the image using Coil
-      Box(
-        modifier = Modifier
-          .height(200.dp)
-          .fillMaxWidth()
-      ) {
-        AsyncImageProfile(
-          photoUrl = coffeeItem.imageUri,
-          modifier = Modifier
-            .padding(start = 45.dp, top = 10.dp)
-            .size(150.dp),
-          contentScale = ContentScale.Fit
 
-        )
-      }
-
-      // Content details
-      Column(
-        modifier = Modifier
-          .fillMaxWidth()
-          .padding(16.dp)
-      ) {
-        // Display other text information
-        Text(
-          text = coffeeItem.name,
-          fontWeight = FontWeight.Bold,
-          fontSize = 18.sp,
-          color = MaterialTheme.colorScheme.primary
-        )
-
-        // Additional details (you can customize this part)
-        Text(text = "Price: ${coffeeItem.price}", fontSize = 14.sp)
-        // Add more details as needed
-
-        // Add an icon for adding to the cart or any other action
-        Icon(imageVector = Icons.Default.ShoppingCart,
-          contentDescription = null,
-          tint = MaterialTheme.colorScheme.primary,
-          modifier = Modifier
-            .size(24.dp)
-            .padding(8.dp)
-            .clickable { /* Handle icon click if needed */ })
-      }
-    }
-  }
-}
 
 @Composable
 fun CategoryItem(
@@ -212,7 +182,27 @@ fun CoffeeItemCard(
   backgroundTint: Color,
   onClickDonut: (String) -> Unit = {},
   onAddToCart: (CoffeeDrink) -> Unit = {},
+  onFavoriteClick: (Boolean) -> Unit = {},
+  favoriteViewModel: FavoriteViewModel = hiltViewModel()
+
 ) {
+
+
+  var isFavorite by remember(coffeeItem.name) {
+    favoriteViewModel.getFavoriteState(coffeeItem.name)
+  }
+
+  // Load initial favorite state
+  LaunchedEffect(key1 = coffeeItem.name) {
+    val isItemInFavorites = favoriteViewModel.isCoffeeInFavorites(
+      coffeeItem.name
+    ).first()
+    isFavorite = isItemInFavorites
+  }
+
+
+
+
   Box {
     ElevatedCard(
       modifier = Modifier
@@ -233,11 +223,19 @@ fun CoffeeItemCard(
 
         IconFavorite(
           modifier = Modifier
-
             .padding(16.dp)
-            .size(20.dp)
+            .size(35.dp)
             .align(Alignment.Start)
-            .background(Color.White, CircleShape)
+            .background(Color.White, CircleShape),
+          isFavorite = isFavorite,
+          onClickFavorite = {
+            if (!isFavorite) {
+              // Call the onFavoriteClick only if the item is not already a favorite
+              onFavoriteClick(true)
+            }
+            // Update the UI state (isFavorite) directly
+            isFavorite = true
+          }
         )
 
         Column(modifier = Modifier.padding(start = 2.dp, end = 1.dp)) {
@@ -285,13 +283,28 @@ fun CoffeeItemCard(
 }
 
 @Composable
-fun IconFavorite(modifier: Modifier = Modifier, onClickFavorite: () -> Unit = {}) {
-  IconButtonWithIcon(
-    modifier = modifier, iconResourceId = R.drawable.icon_fav, onClick = onClickFavorite
-  )
+fun IconFavorite(
+  modifier: Modifier = Modifier,
+  isFavorite: Boolean,
+  onClickFavorite: () -> Unit = {}
+) {
+  Box(
+    modifier = modifier.clickable { onClickFavorite() }
+  ) {
+    val icon = if (isFavorite) {
+      Icons.Default.Favorite // Filled heart icon
+    } else {
+      Icons.Default.FavoriteBorder // Empty heart icon
+    }
+
+    Icon(
+      imageVector = icon,
+      contentDescription = if (isFavorite) "Favorite" else "Not Favorite",
+      tint = if (isFavorite) Color.Red else Color.Gray, // Tint color for the icon
+      modifier = Modifier.size(33.dp)
+    )
+  }
 }
-
-
 
 
 

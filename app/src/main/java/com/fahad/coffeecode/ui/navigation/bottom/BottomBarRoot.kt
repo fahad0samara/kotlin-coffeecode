@@ -25,18 +25,24 @@ import androidx.navigation.compose.rememberNavController
 
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.fahad.coffeecode.ui.screen.favorite.FavoriteViewModel
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter", "UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun BottomBarRoot(navController: NavHostController = rememberNavController()
 
 ) {
-//  val favoriteViewModel: FavoriteViewModel = hiltViewModel()
+  val favoriteViewModel: FavoriteViewModel = hiltViewModel()
 
 
   Scaffold(
     bottomBar = { BottomBarItem(navController = navController,
+        favoriteViewModel = favoriteViewModel
+
 
 
 
@@ -56,7 +62,7 @@ fun BottomBarRoot(navController: NavHostController = rememberNavController()
 @Composable
 fun BottomBarItem(
   navController: NavHostController,
-//  favoriteViewModel: FavoriteViewModel
+  favoriteViewModel: FavoriteViewModel
 ) {
   val screens = listOf(
     BottomBar.Home,
@@ -67,8 +73,8 @@ fun BottomBarItem(
   val navBackStackEntry by navController.currentBackStackEntryAsState()
   val currentDestination = navBackStackEntry?.destination
 
-//  val favoriteItems by favoriteViewModel.favorite.collectAsState(emptyList())
-//  val favoriteItemCount = favoriteItems.size
+  val favoriteItems by favoriteViewModel.favorite.collectAsState(emptyList())
+  val favoriteItemCount = favoriteItems.size
 
   val bottomBarDestination = screens.any { it.route == currentDestination?.route }
 
@@ -98,14 +104,14 @@ fun BottomBarItem(
                   contentDescription = "Navigation Icon",
                   modifier = Modifier.size(24.dp)
                 )
-//                if (screen == BottomBar.Favorite && favoriteItemCount > 0) {
-//                  Badge(
-//                    count = favoriteItemCount,
-//                    modifier = Modifier.align(
-//                      Alignment.CenterVertically
-//                    )
-//                  )
-//                }
+                if (screen == BottomBar.Favorite && favoriteItemCount > 0) {
+                  Badge(
+                    count = favoriteItemCount,
+                    modifier = Modifier.align(
+                      Alignment.CenterVertically
+                    )
+                  )
+                }
               }
             },
             label = {

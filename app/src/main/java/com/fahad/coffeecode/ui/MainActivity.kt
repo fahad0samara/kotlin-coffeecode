@@ -49,7 +49,8 @@ class MainActivity : ComponentActivity() {
           modifier = Modifier.fillMaxSize(),
           color = MaterialTheme.colorScheme.background
         ) {
-          RootNavigation(navController = rememberNavController())
+            AppContent()
+
         }
       }
     }
@@ -62,6 +63,7 @@ fun AppContent() {
         context = LocalContext.current
         )
   ) {
+    RootNavigation(navController = rememberNavController())
 
   } else {
     InternetStatusScreen()

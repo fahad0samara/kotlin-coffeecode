@@ -12,9 +12,10 @@ import androidx.navigation.compose.composable
 import android.annotation.SuppressLint
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.navigation
+import com.fahad.coffeecode.ui.screen.favorite.FavoriteViewModel
 import com.fahad.coffeecode.ui.screen.Home.Home
+import com.fahad.coffeecode.ui.screen.favorite.FavoriteScreen
 
-import com.fahad.kotlin_auth_with_googles.ui.screen.favorite.FavoriteScreen
 import com.fahad.coffeecode.ui.screen.profile.ProfileScreen
 import com.fahad.coffeecode.ui.screen.profile.UserDataViewModel
 
@@ -24,7 +25,7 @@ fun BottomBarNavigation(
   navController: NavHostController,
 ) {
   val userDataViewModel: UserDataViewModel = hiltViewModel()
-
+  val favoriteViewModel: FavoriteViewModel = hiltViewModel()
 
 
 
@@ -41,7 +42,8 @@ fun BottomBarNavigation(
 
     composable(route = BottomBar.Favorite.route) {
       FavoriteScreen(
-        navController = navController,
+        favoriteViewModel, navController
+
       )
     }
 
