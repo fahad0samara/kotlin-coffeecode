@@ -11,7 +11,12 @@ import androidx.navigation.compose.composable
 
 import android.annotation.SuppressLint
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
 import androidx.navigation.navigation
+import com.fahad.coffeecode.ui.CoffeeViewModel
+
+import com.fahad.coffeecode.ui.screen.Home.DetailsScreen
 import com.fahad.coffeecode.ui.screen.favorite.FavoriteViewModel
 import com.fahad.coffeecode.ui.screen.Home.Home
 import com.fahad.coffeecode.ui.screen.favorite.FavoriteScreen
@@ -26,6 +31,7 @@ fun BottomBarNavigation(
 ) {
   val userDataViewModel: UserDataViewModel = hiltViewModel()
   val favoriteViewModel: FavoriteViewModel = hiltViewModel()
+    val viewModel: CoffeeViewModel = hiltViewModel()
 
 
 
@@ -36,7 +42,7 @@ fun BottomBarNavigation(
   ) {
     composable(route = BottomBar.Home.route) {
       Home(
-     userDataViewModel
+        userDataViewModel, navController
       )
     }
 
@@ -46,6 +52,21 @@ fun BottomBarNavigation(
 
       )
     }
+
+    composable(
+      route = "details/{itemId}",
+      arguments = listOf(navArgument("itemId") { type = NavType.StringType })
+    ) { backStackEntry ->
+      val itemId = backStackEntry.arguments?.getString("itemId")
+      val coffeeItem = viewModel.coffeeItems.value.find { it.id == itemId }
+      coffeeItem?.let {
+        DetailsScreen(coffeeItem)
+      }
+    }
+
+
+
+
 
 
 
@@ -67,6 +88,8 @@ fun BottomBarNavigation(
 
   }
 }
+
+
 
 fun NavGraphBuilder.searchNavGraph(navController: NavHostController) {
 

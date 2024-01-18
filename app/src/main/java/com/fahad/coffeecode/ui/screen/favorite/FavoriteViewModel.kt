@@ -34,7 +34,7 @@ class FavoriteViewModel @Inject constructor(private val favoriteRepository: Favo
     return favoriteStates.getOrPut(name) { mutableStateOf(false) }
   }
 
-  fun addToFavorite(item: CoffeeDrink) {
+  fun addToFavorite(item: CoffeeDrink, onAddToFavorite: (String) -> Unit) {
     viewModelScope.launch {
       val isItemInFavorites = favoriteRepository.isCoffeeInFavorites(item.name).first()
 
@@ -47,11 +47,17 @@ class FavoriteViewModel @Inject constructor(private val favoriteRepository: Favo
           caffeineContent = item.caffeineContent,
         )
         favoriteRepository.insertFavorite(newItem)
+
+        // Notify the caller that the item was added to favorites
+        onAddToFavorite(item.name)
       }
+
       // Update the favorite state in the shared map
       getFavoriteState(item.name).value = true
     }
   }
+
+
 
   fun deleteFromFavorites(favoriteItem: FavoriteItem) {
     viewModelScope.launch {

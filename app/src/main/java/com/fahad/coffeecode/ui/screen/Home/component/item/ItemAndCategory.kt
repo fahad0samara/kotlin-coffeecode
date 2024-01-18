@@ -2,6 +2,8 @@ package com.fahad.coffeecode.ui.screen.Home.component.item
 
 import AsyncImageProfile
 import RecipeRover.data.local.entities.FavoriteItem
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -41,9 +43,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.fahad.coffeecode.R
 import com.fahad.coffeecode.ui.CoffeeViewModel
 import com.fahad.coffeecode.ui.screen.favorite.FavoriteViewModel
@@ -51,11 +55,13 @@ import com.fahad.coffeecode.util.icon.IconButtonWithIcon
 import kotlinx.coroutines.flow.first
 
 @Composable
-fun ItemAndCategory() {
+fun ItemAndCategory(
+    navController: NavController
+) {
   val viewModel: CoffeeViewModel = hiltViewModel()
   val favoriteViewModel: FavoriteViewModel = hiltViewModel()
 
-
+  val context = LocalContext.current
 
 
 
@@ -97,23 +103,22 @@ fun ItemAndCategory() {
         val color =
           if (index % 2 == 0) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.secondary
         CoffeeItemCard(
+          navController = navController,
+
+
           coffeeItem = item,
           backgroundTint = color,
           onFavoriteClick = { isFavorite ->
             if (isFavorite) {
-              favoriteViewModel.addToFavorite(item)
-            } else {
-              // Create a FavoriteItem from CoffeeDrink
-              val favoriteItemToDelete = FavoriteItem(
-                name = item.name,
-                description = item.description,
-                imageUri = item.imageUri,
-                servingSize = item.servingSize,
-                caffeineContent = item.caffeineContent,
-              )
-              favoriteViewModel.deleteFromFavorites(favoriteItemToDelete)
-            }
+              favoriteViewModel.addToFavorite(item) { itemName ->
+                Toast.makeText(context, "Added to favorites: $itemName", Toast.LENGTH_SHORT).show()
+              }
+
+       }
           }
+
+
+
         )
 
 
@@ -183,7 +188,8 @@ fun CoffeeItemCard(
   onClickDonut: (String) -> Unit = {},
   onAddToCart: (CoffeeDrink) -> Unit = {},
   onFavoriteClick: (Boolean) -> Unit = {},
-  favoriteViewModel: FavoriteViewModel = hiltViewModel()
+  favoriteViewModel: FavoriteViewModel = hiltViewModel(),
+    navController: NavController
 
 ) {
 
@@ -204,9 +210,13 @@ fun CoffeeItemCard(
 
 
   Box {
+
     ElevatedCard(
       modifier = Modifier
-        .clickable { onClickDonut(coffeeItem.name) }
+        .clickable {
+          Log.d("Clickable", "Card clicked for item: ${coffeeItem.id}")
+          navController.navigate("details/${coffeeItem.id}")
+        }
         .width(180.dp)
         .height(270.dp)
         .clip(RoundedCornerShape(20.dp)),

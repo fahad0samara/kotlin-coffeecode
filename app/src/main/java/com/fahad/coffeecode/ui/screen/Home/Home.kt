@@ -26,7 +26,8 @@ import com.fahad.coffeecode.ui.screen.profile.UserDataViewModel
 @Composable
 fun Home(
 
-  userDataViewModel: UserDataViewModel
+  userDataViewModel: UserDataViewModel,
+    navController: NavController
 ) {
   LazyColumn(
     contentPadding = PaddingValues(vertical = 2.dp),
@@ -63,7 +64,9 @@ fun Home(
       }
     }
     item {
-      ItemAndCategory()
+      ItemAndCategory(
+        navController = navController
+      )
     }
     item {
       Row(
