@@ -17,7 +17,7 @@ interface CardDao {
     @Query("SELECT * FROM items")
     fun getAllItems(): Flow<List<CardItem>>
 
-    @Query("SELECT title FROM items")
+    @Query("SELECT  name FROM items")
     suspend fun getAllItemNames(): List<String>
 
     @Query("SELECT * FROM items WHERE id = :itemId")

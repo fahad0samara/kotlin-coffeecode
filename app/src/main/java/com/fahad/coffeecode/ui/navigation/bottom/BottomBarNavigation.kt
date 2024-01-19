@@ -19,6 +19,8 @@ import com.fahad.coffeecode.ui.CoffeeViewModel
 import com.fahad.coffeecode.ui.screen.Home.DetailsScreen
 import com.fahad.coffeecode.ui.screen.favorite.FavoriteViewModel
 import com.fahad.coffeecode.ui.screen.Home.Home
+import com.fahad.coffeecode.ui.screen.cart.CartScreen
+import com.fahad.coffeecode.ui.screen.cart.CartViewModel
 import com.fahad.coffeecode.ui.screen.favorite.FavoriteScreen
 
 import com.fahad.coffeecode.ui.screen.profile.ProfileScreen
@@ -32,6 +34,8 @@ fun BottomBarNavigation(
   val userDataViewModel: UserDataViewModel = hiltViewModel()
   val favoriteViewModel: FavoriteViewModel = hiltViewModel()
     val viewModel: CoffeeViewModel = hiltViewModel()
+  val cartViewModel: CartViewModel = hiltViewModel()
+
 
 
 
@@ -53,6 +57,19 @@ fun BottomBarNavigation(
       )
     }
 
+    composable(route = BottomBar.Cart.route) {
+      CartScreen(
+        cartViewModel
+        )
+    }
+
+
+
+
+
+
+
+
     composable(
       route = "details/{itemId}",
       arguments = listOf(navArgument("itemId") { type = NavType.StringType })
@@ -60,7 +77,11 @@ fun BottomBarNavigation(
       val itemId = backStackEntry.arguments?.getString("itemId")
       val coffeeItem = viewModel.coffeeItems.value.find { it.id == itemId }
       coffeeItem?.let {
-        DetailsScreen(coffeeItem)
+        DetailsScreen(coffeeItem,
+            navController = navController,
+            cartViewModel = cartViewModel
+
+          )
       }
     }
 

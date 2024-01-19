@@ -29,6 +29,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.fahad.coffeecode.ui.screen.cart.CartViewModel
 import com.fahad.coffeecode.ui.screen.favorite.FavoriteViewModel
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter", "UnusedMaterial3ScaffoldPaddingParameter")
@@ -37,11 +38,16 @@ fun BottomBarRoot(navController: NavHostController = rememberNavController()
 
 ) {
   val favoriteViewModel: FavoriteViewModel = hiltViewModel()
+  val cartViewModel:CartViewModel = hiltViewModel()
+
 
 
   Scaffold(
     bottomBar = { BottomBarItem(navController = navController,
-        favoriteViewModel = favoriteViewModel
+        favoriteViewModel = favoriteViewModel,
+      cartViewModel = cartViewModel
+
+
 
 
 
@@ -62,12 +68,16 @@ fun BottomBarRoot(navController: NavHostController = rememberNavController()
 @Composable
 fun BottomBarItem(
   navController: NavHostController,
-  favoriteViewModel: FavoriteViewModel
+  favoriteViewModel: FavoriteViewModel,
+    cartViewModel: CartViewModel,
+
 ) {
   val screens = listOf(
     BottomBar.Home,
     BottomBar.Favorite,
+    BottomBar.Cart,
     BottomBar.Profile,
+
   )
 
   val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -75,6 +85,12 @@ fun BottomBarItem(
 
   val favoriteItems by favoriteViewModel.favorite.collectAsState(emptyList())
   val favoriteItemCount = favoriteItems.size
+
+    val cartItems by cartViewModel.cart.collectAsState(emptyList())
+    val cartItemCount = cartItems.size
+
+
+
 
   val bottomBarDestination = screens.any { it.route == currentDestination?.route }
 
@@ -97,6 +113,9 @@ fun BottomBarItem(
           NavigationBarItem(
             icon = {
               Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(end = 4.dp)
+
 
               ) {
                 Icon(
@@ -104,13 +123,15 @@ fun BottomBarItem(
                   contentDescription = "Navigation Icon",
                   modifier = Modifier.size(24.dp)
                 )
-                if (screen == BottomBar.Favorite && favoriteItemCount > 0) {
-                  Badge(
-                    count = favoriteItemCount,
-                    modifier = Modifier.align(
-                      Alignment.CenterVertically
-                    )
-                  )
+                if (screen.route == BottomBar.Favorite.route) {
+                  if (favoriteItemCount > 0) {
+                    Badge(count = favoriteItemCount)
+                  }
+                }
+                if (screen.route == BottomBar.Cart.route) {
+                  if (cartItemCount > 0) {
+                    Badge(count = cartItemCount)
+                  }
                 }
               }
             },

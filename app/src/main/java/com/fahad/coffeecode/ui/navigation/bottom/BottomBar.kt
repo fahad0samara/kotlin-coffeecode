@@ -4,6 +4,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.ui.graphics.vector.ImageVector
 
 sealed class BottomBar(
@@ -15,6 +16,12 @@ sealed class BottomBar(
     route = "home",
     title = "HOME",
     icon = Icons.Default.Home
+  )
+
+  data object Cart : BottomBar(
+    route = "CART",
+    title = "CART",
+    icon = Icons.Default.ShoppingCart
   )
 
 
