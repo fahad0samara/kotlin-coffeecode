@@ -34,7 +34,7 @@ fun Home(
     modifier = Modifier.statusBarsPadding()
   ) {
     item {
-      Header()
+      Header(navController = navController)
     }
     item {
       Row(

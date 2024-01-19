@@ -12,9 +12,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 
 @Composable
-fun Header() {
+fun Header(
+    navController: NavController
+) {
   Column(
     modifier = Modifier
       .fillMaxWidth()
@@ -24,7 +27,7 @@ fun Header() {
   ) {
     UserName()
     Spacer(modifier = Modifier.height(16.dp))
-    SearchHome()
+    SearchHome(navController = navController)
   }
 }
 

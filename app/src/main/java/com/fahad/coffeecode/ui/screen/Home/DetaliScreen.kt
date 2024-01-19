@@ -28,10 +28,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.TextUnit
@@ -41,6 +43,8 @@ import androidx.navigation.NavHostController
 
 import com.fahad.coffeecode.domain.model.CoffeeDrink
 import com.fahad.coffeecode.ui.screen.cart.CartViewModel
+import com.fahad.coffeecode.util.Button.RoundedButton
+import com.fahad.coffeecode.util.Button.RoundedButton1
 
 @Composable
 fun DetailsScreen(coffeeItem: CoffeeDrink,
@@ -50,8 +54,10 @@ fun DetailsScreen(coffeeItem: CoffeeDrink,
 
 
                   ) {
+    // Check if the item is already in the cart
+    val isItemInCart = cartViewModel.isItemInCart(coffeeItem).collectAsState(false).value
 
-
+  val context = LocalContext.current
 
   Column(
     modifier = Modifier
@@ -130,23 +136,37 @@ fun DetailsScreen(coffeeItem: CoffeeDrink,
           .fillMaxWidth()
           .padding(bottom = 44.dp)
       ) {
-        Button(
+
+        RoundedButton1(
+          text = if (isItemInCart) "the item is in the cart" else "Add to Cart",
+
+
+
+
+          backgroundTintColor = MaterialTheme.colorScheme.primary,
           onClick = {
+
+
+
+
+
             cartViewModel.addToCart(
-                coffeeItem
+              coffeeItem,
+                context
+
             )
           },
-          modifier = Modifier
-            .height(48.dp)
-            .fillMaxWidth(),
-          colors = ButtonDefaults.buttonColors(
-            containerColor = MaterialTheme.colorScheme.secondary,
-            contentColor = Color.White
-          ),
-          shape = RoundedCornerShape(8.dp)
-        ) {
-          Text(text = "Add to Cart", fontWeight = FontWeight.Bold, color = Color.White)
-        }
+            Color = Color.White,
+            modifier = Modifier
+              .fillMaxWidth()
+              .padding(0.dp, 0.dp, 0.dp, 16.dp),
+
+
+
+        )
+
+
+
       }
     }
   }

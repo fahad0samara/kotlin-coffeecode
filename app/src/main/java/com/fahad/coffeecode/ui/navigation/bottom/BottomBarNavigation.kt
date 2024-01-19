@@ -19,6 +19,7 @@ import com.fahad.coffeecode.ui.CoffeeViewModel
 import com.fahad.coffeecode.ui.screen.Home.DetailsScreen
 import com.fahad.coffeecode.ui.screen.favorite.FavoriteViewModel
 import com.fahad.coffeecode.ui.screen.Home.Home
+import com.fahad.coffeecode.ui.screen.Home.search.SearchScreen
 import com.fahad.coffeecode.ui.screen.cart.CartScreen
 import com.fahad.coffeecode.ui.screen.cart.CartViewModel
 import com.fahad.coffeecode.ui.screen.favorite.FavoriteScreen
@@ -33,8 +34,9 @@ fun BottomBarNavigation(
 ) {
   val userDataViewModel: UserDataViewModel = hiltViewModel()
   val favoriteViewModel: FavoriteViewModel = hiltViewModel()
-    val viewModel: CoffeeViewModel = hiltViewModel()
+    val coffeeViewModel: CoffeeViewModel = hiltViewModel()
   val cartViewModel: CartViewModel = hiltViewModel()
+
 
 
 
@@ -75,7 +77,7 @@ fun BottomBarNavigation(
       arguments = listOf(navArgument("itemId") { type = NavType.StringType })
     ) { backStackEntry ->
       val itemId = backStackEntry.arguments?.getString("itemId")
-      val coffeeItem = viewModel.coffeeItems.value.find { it.id == itemId }
+      val coffeeItem = coffeeViewModel.coffeeItems.value.find { it.id == itemId }
       coffeeItem?.let {
         DetailsScreen(coffeeItem,
             navController = navController,
@@ -105,24 +107,30 @@ fun BottomBarNavigation(
 
 
 
-    searchNavGraph(navController = navController)
+    searchNavGraph(navController = navController, userDataViewModel = userDataViewModel,
+        coffeeViewModel = coffeeViewModel
+      )
 
   }
 }
 
 
 
-fun NavGraphBuilder.searchNavGraph(navController: NavHostController) {
+fun NavGraphBuilder.searchNavGraph(navController: NavHostController, userDataViewModel: UserDataViewModel,
+                                   coffeeViewModel: CoffeeViewModel,
+                                   ) {
 
   navigation(
     startDestination = "search",
     route = "search_nav_graph",
 
     ) {
-//    composable(route = "search") {
-//      SearchScreen(navController = navController, viewModel = hiltViewModel())
-//
-//    }
+    composable(route = "search") {
+      SearchScreen(navController = navController, coffeeViewModel = coffeeViewModel,
+
+        )
+
+    }
 
   }
 }

@@ -21,10 +21,15 @@ import com.fahad.coffeecode.ui.theme.dimens
 import com.fahad.coffeecode.util.Button.RoundedButton
 
 @Composable
+
 fun SearchHome(
+    navController: NavController
+
+
 
 ){
-  // Search bar with TextField
+
+
 
   OutlinedTextField(
     value = "",
@@ -34,12 +39,12 @@ fun SearchHome(
       .padding(dimens.small3)
       .height(dimens.logoSize1)
       .onFocusChanged {
-//        if (it.isFocused) {
-//          navController.navigate("search"
-//
-//
-//          )
-//        }
+        if (it.isFocused) {
+          navController.navigate("search"
+
+
+          )
+        }
       },
     trailingIcon = {
       RoundedButton(
