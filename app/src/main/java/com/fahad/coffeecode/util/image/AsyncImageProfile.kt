@@ -1,5 +1,6 @@
-
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxWidth
 
 import androidx.compose.foundation.layout.padding
 
@@ -26,18 +27,19 @@ import androidx.compose.foundation.layout.wrapContentWidth
 fun AsyncImageProfile(
   photoUrl: String?,
   modifier: Modifier = Modifier,
-  contentScale: ContentScale = ContentScale.Crop, // Default content scale
+  contentScale: ContentScale = ContentScale.Crop,
   loadingModifier: Modifier = Modifier,
-  loadingSize: Int = 0, // Default loading indicator size
-  loadingColor: Color = MaterialTheme.colorScheme.primary // Default loading indicator color
-
-
+  loadingSize: Int = 0,
+  loadingColor: Color = MaterialTheme.colorScheme.primary,
+  circularCrop: Boolean = false
 ) {
   val painter = rememberAsyncImagePainter(
     ImageRequest.Builder(LocalContext.current).data(data = photoUrl).apply {
       crossfade(true)
-      transformations(CircleCropTransformation())
       scale(Scale.FILL)
+      if (circularCrop) {
+        transformations(CircleCropTransformation())
+      }
     }.build()
   )
 
@@ -45,25 +47,16 @@ fun AsyncImageProfile(
     painter = painter,
     contentDescription = "",
     modifier = modifier,
-    contentScale = contentScale
+    contentScale = contentScale,
+    alignment = Alignment.Center
   )
 
   // Show loading indicator while the image is loading
   if (painter.state is AsyncImagePainter.State.Loading) {
     CircularProgressIndicator(
-      modifier = Modifier,
-
+      modifier = loadingModifier,
       strokeWidth = 2.dp,
-
-
-      color = loadingColor,
-
-
-
-
-
-
-
+      color = loadingColor
     )
   }
 }

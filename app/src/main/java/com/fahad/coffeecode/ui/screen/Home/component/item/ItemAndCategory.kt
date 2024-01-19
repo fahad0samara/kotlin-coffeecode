@@ -288,6 +288,7 @@ fun CoffeeItemCard(
         .size(190.dp),
       contentScale = ContentScale.Fit,
       loadingSize = 200,
+      circularCrop = true,
     )
   }
 }
