@@ -2,6 +2,7 @@ package com.fahad.coffeecode.ui.screen.Home
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -97,7 +98,10 @@ fun Home(
     }
 
 item {
-  CardsSection()
+  Column (modifier = Modifier.padding(bottom = 150.dp)){
+    CardsSection()
+  }
+
     }
 
 
