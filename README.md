@@ -5,7 +5,7 @@ Welcome to the Kotlin Coffee Code App! ☕️
 
 ## Overview
 
-The Kotlin Coffee Code App is a feature-rich Android application built using the MVVM architecture. It leverages Room Database for data persistence, Dagger Hilt for dependency injection, Retrofit and Ktor for network requests, and Jetpack Compose for the UI.
+The Kotlin Coffee Code App is a feature-rich Android application built using the MVVM architecture. It leverages Room Database for data persistence, Dagger Hilt for dependency injection, Retrofit and Ktor for network requests, and Jetpack Compose for the UI. Additionally, Google Sign-In is used for authentication.
 
 ## Features
 
@@ -32,6 +32,8 @@ The project follows the MVVM (Model-View-ViewModel) architecture, promoting a cl
 - **Ktor:** Networking libraries for handling API requests.
 
 - **Jetpack Compose:** Modern Android UI toolkit for building native user interfaces.
+
+- **Google Sign-In:** Utilized for user authentication.
 
 ## Getting Started
 
